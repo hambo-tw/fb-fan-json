@@ -1,3 +1,4 @@
+# coding: utf-8
 import time
 import json
 import re
@@ -10,13 +11,13 @@ from bs4 import BeautifulSoup
 url = "https://www.facebook.com/newtoydesign"
 
 options = Options()
-# options.add_argument('--headless')  # 測試中你可開啟視窗
+options.add_argument('--headless')
 options.add_argument('--disable-gpu')
 options.add_argument('--log-level=3')
 
 driver = webdriver.Chrome(options=options)
 driver.get(url)
-time.sleep(10)  # 網頁載入較慢，多等一點
+time.sleep(5)
 
 html = driver.page_source
 soup = BeautifulSoup(html, 'html.parser')
@@ -42,7 +43,7 @@ else:
 
 driver.quit()
 
-# ✅ 只有兩者都抓到才寫入 json 與 git push
+# ✅ 只有兩者都抓到才寫入 JSON 與 git push
 if fans is not None and followers is not None:
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -57,9 +58,12 @@ if fans is not None and followers is not None:
 
     print("📦 fans.json 已更新")
 
-    subprocess.run(["git", "add", "fans.json"])
+    subprocess.run(["git", "add", "-A"])  # 包含所有修改
     subprocess.run(["git", "commit", "-m", f"update: fans={fans}, followers={followers}"])
+    subprocess.run(["git", "pull", "--rebase", "origin", "main"])
     subprocess.run(["git", "push", "origin", "main"])
     print("✅ 已 push 到 GitHub Pages")
 else:
     print("⚠️ 沒有完整數據，不寫入檔案")
+
+input("程式執行完畢，按 Enter 鍵關閉...")
