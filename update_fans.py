@@ -58,10 +58,7 @@ if fans is not None and followers is not None:
 
     print("📦 fans.json 已更新")
 
-    subprocess.run(["git", "add", "-A"])  # 包含所有修改
-    subprocess.run(["git", "commit", "-m", f"update: fans={fans}, followers={followers}"])
-    subprocess.run(["git", "pull", "--rebase", "origin", "main"])
-    subprocess.run(["git", "push", "origin", "main"])
+    
     print("✅ 已 push 到 GitHub Pages")
 else:
     print("⚠️ 沒有完整數據，不寫入檔案")
